@@ -1,1 +1,5 @@
-src/SpaceXtract/__pycache__
+**/__pycache__
+.venv/
+src/*.meta
+src/Starlink29thJan.json
+src/Starlink17thFeb2020.json

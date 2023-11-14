@@ -17,6 +17,7 @@ class Util():
         cap.set(cv2.CAP_PROP_POS_FRAMES, int((right + left) / 2))
 
         while right > left + 1:
+            print(right-(left+1))
             _, frame = cap.read()
 
             image = self.extractor.prepare_frame(frame, self.extractor.image_dict[key][0])
