@@ -67,7 +67,7 @@ def decimal_point_conversion(digit_pos_list):
 
 
 
-def get_data(cap, file, t0, out, name, live):
+def get_data(cap, file, t0, out, name, live, from_launch=True):
     dt = 1 / cap.get(cv2.CAP_PROP_FPS)
 
     cur_time = 0
@@ -91,7 +91,9 @@ def get_data(cap, file, t0, out, name, live):
     
     
     if not live:
-        if util.find_anchor(cap, start=ANCHOR_SEARCH_START_TIME_FRACTION, end=ANCHOR_SEARCH_END_TIME_FRACTION):
+        if from_launch and t0 is not None:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, t0*cap.get(cv2.CAP_PROP_FPS))
+        elif util.find_anchor(cap, start=ANCHOR_SEARCH_START_TIME_FRACTION, end=ANCHOR_SEARCH_END_TIME_FRACTION):
             util.skip_from_launch(cap, 'sign', t0)
     else:
         util.play_until_anchor_found(cap, session)
@@ -192,6 +194,8 @@ def set_args():
                         help='Force override of output file')
     parser.add_argument('-l', action='store_true', dest='live',
                         help='Is the source live')
+    parser.add_argument('-s', action='store_true', dest='from_launch',
+                        help='Start from time')
 
     args = parser.parse_args()
 
@@ -222,7 +226,7 @@ def main():
         print("Cannot access video in file. Please make sure the path to the file is valid")
         exit(3)
 
-    get_data(cap, file, to_float(args.launch_time), args.out, args.destination_path, args.live)
+    get_data(cap, file, to_float(args.launch_time), args.out, args.destination_path, args.live, args.from_launch)
 
 
 if __name__ == '__main__':
