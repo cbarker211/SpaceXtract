@@ -30,7 +30,12 @@ def get_capture(cap_path):
 
     # Check if cap_path is a URL of a YouTube video
     if youtube_url_validation(cap_path):
-        return get_capture_from_url(cap_path, '1080p')
+        for res in ['1080p','720p','480p','360p']:
+            if get_capture_from_url(cap_path, res) == None:
+                continue
+            else:
+                print(res)
+                return get_capture_from_url(cap_path, res)  
 
     return cv2.VideoCapture(cap_path)
 
